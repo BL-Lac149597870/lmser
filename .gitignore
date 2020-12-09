@@ -1,0 +1,7 @@
+.vscode
+.idea
+data
+/output/*
+!/output/.gitkeep
+/output2/*
+!/output2/.gitkeep
