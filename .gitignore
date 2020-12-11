@@ -5,3 +5,5 @@ data
 !/output/.gitkeep
 /output2/*
 !/output2/.gitkeep
+/output3/*
+!/output3/.gitkeep

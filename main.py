@@ -18,7 +18,6 @@ def plot(images, figSize, batchSize, figName):
     a, b = figSize
     for idx in np.arange(batchSize):
         ax = fig.add_subplot(a, b, idx+1)
-        print(images[idx])
         ax.imshow(np.squeeze(images[idx]), cmap='gray')
         plt.xticks([]), plt.yticks([])
     plt.savefig(figName)
@@ -159,8 +158,8 @@ class ConvAutoEncoderManual(nn.Module):
 
 if __name__ == '__main__':
     dataTransform = transforms.Compose([transforms.ToTensor()])
-    trainDataset = MNIST(root='./data', train=True, transform=dataTransform, download=True)
-    testDataset = MNIST(root='./data', train=False, transform=dataTransform, download=True)
+    trainDataset = MNIST(root='./data', train=True, transform=dataTransform, download=False)
+    testDataset = MNIST(root='./data', train=False, transform=dataTransform, download=False)
     batchSize = 64
     trainLoader = DataLoader(trainDataset, batch_size=batchSize, shuffle=True)
     testLoader = DataLoader(testDataset, batch_size=batchSize, shuffle=False)

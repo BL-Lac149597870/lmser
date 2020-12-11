@@ -1,10 +1,10 @@
 '''
 Author: QHGG
-Date: 2020-12-08 22:21:58
-LastEditTime: 2020-12-09 12:39:38
+Date: 2020-12-09 13:01:01
+LastEditTime: 2020-12-09 13:09:02
 LastEditors: QHGG
 Description: 
-FilePath: /lmser/main2.py
+FilePath: /lmser/main3.py
 '''
 import torch
 import torch.nn as nn
@@ -168,8 +168,8 @@ def timeLable():
 
 if __name__ == '__main__':
     dataTransform = transforms.Compose([transforms.ToTensor()])
-    trainDataset = CIFAR10(root='./data', train=True, transform=dataTransform, download=False)
-    testDataset = CIFAR10(root='./data', train=False, transform=dataTransform, download=False)
+    trainDataset = SVHN(root='./data', split='train', transform=dataTransform, download=False)
+    testDataset = SVHN(root='./data', split='test', transform=dataTransform, download=False)
     batchSize = 64
     trainLoader = DataLoader(trainDataset, batch_size=batchSize, shuffle=True)
     testLoader = DataLoader(testDataset, batch_size=batchSize, shuffle=False)
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     displayImages, displayLabels = dataIter.next()
     displayImages = displayImages.numpy()
     print(displayImages.shape)
-    plot(displayImages, (4, 4), 16, './output2/original.png')
+    plot(displayImages, (4, 4), 16, './output3/original.png')
     displayImages = torch.tensor(displayImages)
     displayImages = Variable(displayImages.cuda())
 
@@ -253,7 +253,7 @@ if __name__ == '__main__':
         out, decoded = model(displayImages)
         decoded = decoded.cpu().data.numpy()
         decoded = decoded.reshape(-1, 3, 32, 32)
-        plot(decoded, (4, 4), 16, './output2/Epoch_' + str(epoch + 1) + '.png')
+        plot(decoded, (4, 4), 16, './output3/Epoch_' + str(epoch + 1) + '.png')
         scheduler.step()
 
 
@@ -262,23 +262,23 @@ if __name__ == '__main__':
     line2, = plt.plot(x, testLosses, 'g')
     plt.legend(handles=[line1, line2], labels=['Train Loss', 'Test Loss'])
     plt.title('Train Loss and Test Loss')
-    plt.savefig('./CIFAR10/'+ timeLable() +'loss.png')
+    plt.savefig('./SVHN/'+ timeLable() +'loss.png')
     plt.close()
     line3, = plt.plot(x, trainReconLosses, 'r')
     line4, = plt.plot(x, testReconLosses, 'g')
     plt.legend(handles=[line3, line4], labels=['Train Recon Loss', 'Test Recon Loss'])
     plt.title('Train Recon Loss and Test Recon Loss')
-    plt.savefig('./CIFAR10/'+ timeLable() +'reconLoss.png')
+    plt.savefig('./SVHN/'+ timeLable() +'reconLoss.png')
     plt.close()
     line5, = plt.plot(x, trainPredLosses, 'r')
     line6, = plt.plot(x, testPredLosses, 'g')
     plt.legend(handles=[line5, line6], labels=['Train Predict Loss', 'Test Predict Loss'],)
     plt.title('Train Predict Loss and Test Predict Loss')
-    plt.savefig('./CIFAR10/'+ timeLable() +'perdLoss.png')
+    plt.savefig('./SVHN/'+ timeLable() +'perdLoss.png')
     plt.close()
     plt.plot(x, testAcc)
     plt.title('Test Accuracy')
-    plt.savefig('./CIFAR10/'+ timeLable() +'testAcc.png')
+    plt.savefig('./SVHN/'+ timeLable() +'testAcc.png')
     plt.close()
     displayImages = displayImages.cpu().data.numpy()
     displayImages = displayImages.reshape(-1, 3, 32, 32)
@@ -288,14 +288,14 @@ if __name__ == '__main__':
                 displayImages[i, 0, m, n] = 0
                 displayImages[i, 1, m, n] = 0
                 displayImages[i, 2, m, n] = 0
-    plot(displayImages, (4, 4), 16, './output2/masked.png')
+    plot(displayImages, (4, 4), 16, './output3/masked.png')
     
     displayImages = torch.tensor(displayImages)
     displayImages = Variable(displayImages.cuda())
     out, decoded = model(displayImages)
     decoded = decoded.cpu().data.numpy()
     decoded = decoded.reshape(-1, 3, 32, 32)
-    plot(decoded, (4, 4), 16, './CIFAR10/'+ timeLable() +'recovered.png')
+    plot(decoded, (4, 4), 16, './SVHN/'+ timeLable() +'recovered.png')
     encoded = []
     encodedLabel = []
     for step, (images, labels) in enumerate(trainLoader):
@@ -323,5 +323,5 @@ if __name__ == '__main__':
     for i in range(10):
         paintData = visualizeData[visualizeLabel == i]
         plt.scatter(paintData[:, 0], paintData[:, 1], s=10, c=colorBoard[i])
-    plt.savefig('./CIFAR10/'+ timeLable() +'visualize.png')
+    plt.savefig('./SVHN/'+ timeLable() +'visualize.png')
     plt.close()

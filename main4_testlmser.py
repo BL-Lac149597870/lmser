@@ -1,10 +1,10 @@
 '''
 Author: QHGG
-Date: 2020-12-08 22:21:58
-LastEditTime: 2020-12-09 12:39:38
+Date: 2020-12-09 13:01:01
+LastEditTime: 2020-12-10 21:41:16
 LastEditors: QHGG
 Description: 
-FilePath: /lmser/main2.py
+FilePath: /lmser/main4_testlmser.py
 '''
 import torch
 import torch.nn as nn
@@ -151,14 +151,14 @@ class ConvAutoEncoderManual(nn.Module):
                                                      stride=1, padding=1))
         h4 = h4.view(-1, 64*2*2)
         h5 = nn.functional.linear(input=h4, weight=self.weight5, bias=self.bias5)
-        h6 = nn.functional.relu(nn.functional.linear(input=h5, weight=self.weight5.t(), bias=self.bias6) + h4)
+        h6 = nn.functional.relu(nn.functional.linear(input=h5, weight=self.weight5.t(), bias=self.bias6))
         h6 = h6.view(-1, 64, 2, 2)
         h7 = nn.functional.relu(nn.functional.conv_transpose2d(input=h6, weight=self.weight4, bias=self.bias7,
-                                                               stride=1, padding=1) + h3)
+                                                               stride=1, padding=1))
         h8 = nn.functional.relu(nn.functional.conv_transpose2d(input=h7, weight=self.weight3, bias=self.bias8,
-                                                               stride=3, padding=1) + h2)
+                                                               stride=3, padding=1))
         h9 = nn.functional.relu(nn.functional.conv_transpose2d(input=h8, weight=self.weight2, bias=self.bias9,
-                                                               stride=3, padding=0) + h1)
+                                                               stride=3, padding=0))
         h10 = nn.functional.relu(nn.functional.conv_transpose2d(input=h9, weight=self.weight1, bias=self.bias10,
                                                                 stride=3, padding=2))
         return h5, h10
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     displayImages, displayLabels = dataIter.next()
     displayImages = displayImages.numpy()
     print(displayImages.shape)
-    plot(displayImages, (4, 4), 16, './output2/original.png')
+    plot(displayImages, (4, 4), 16, './output4/original.png')
     displayImages = torch.tensor(displayImages)
     displayImages = Variable(displayImages.cuda())
 
@@ -253,7 +253,7 @@ if __name__ == '__main__':
         out, decoded = model(displayImages)
         decoded = decoded.cpu().data.numpy()
         decoded = decoded.reshape(-1, 3, 32, 32)
-        plot(decoded, (4, 4), 16, './output2/Epoch_' + str(epoch + 1) + '.png')
+        plot(decoded, (4, 4), 16, './output4/Epoch_' + str(epoch + 1) + '.png')
         scheduler.step()
 
 
@@ -262,23 +262,23 @@ if __name__ == '__main__':
     line2, = plt.plot(x, testLosses, 'g')
     plt.legend(handles=[line1, line2], labels=['Train Loss', 'Test Loss'])
     plt.title('Train Loss and Test Loss')
-    plt.savefig('./CIFAR10/'+ timeLable() +'loss.png')
+    plt.savefig('./SVHNtest/'+ timeLable() +'loss.png')
     plt.close()
     line3, = plt.plot(x, trainReconLosses, 'r')
     line4, = plt.plot(x, testReconLosses, 'g')
     plt.legend(handles=[line3, line4], labels=['Train Recon Loss', 'Test Recon Loss'])
     plt.title('Train Recon Loss and Test Recon Loss')
-    plt.savefig('./CIFAR10/'+ timeLable() +'reconLoss.png')
+    plt.savefig('./SVHNtest/'+ timeLable() +'reconLoss.png')
     plt.close()
     line5, = plt.plot(x, trainPredLosses, 'r')
     line6, = plt.plot(x, testPredLosses, 'g')
     plt.legend(handles=[line5, line6], labels=['Train Predict Loss', 'Test Predict Loss'],)
     plt.title('Train Predict Loss and Test Predict Loss')
-    plt.savefig('./CIFAR10/'+ timeLable() +'perdLoss.png')
+    plt.savefig('./SVHNtest/'+ timeLable() +'perdLoss.png')
     plt.close()
     plt.plot(x, testAcc)
     plt.title('Test Accuracy')
-    plt.savefig('./CIFAR10/'+ timeLable() +'testAcc.png')
+    plt.savefig('./SVHNtest/'+ timeLable() +'testAcc.png')
     plt.close()
     displayImages = displayImages.cpu().data.numpy()
     displayImages = displayImages.reshape(-1, 3, 32, 32)
@@ -288,14 +288,14 @@ if __name__ == '__main__':
                 displayImages[i, 0, m, n] = 0
                 displayImages[i, 1, m, n] = 0
                 displayImages[i, 2, m, n] = 0
-    plot(displayImages, (4, 4), 16, './output2/masked.png')
+    plot(displayImages, (4, 4), 16, './output4/masked.png')
     
     displayImages = torch.tensor(displayImages)
     displayImages = Variable(displayImages.cuda())
     out, decoded = model(displayImages)
     decoded = decoded.cpu().data.numpy()
     decoded = decoded.reshape(-1, 3, 32, 32)
-    plot(decoded, (4, 4), 16, './CIFAR10/'+ timeLable() +'recovered.png')
+    plot(decoded, (4, 4), 16, './SVHNtest/'+ timeLable() +'recovered.png')
     encoded = []
     encodedLabel = []
     for step, (images, labels) in enumerate(trainLoader):
@@ -323,5 +323,5 @@ if __name__ == '__main__':
     for i in range(10):
         paintData = visualizeData[visualizeLabel == i]
         plt.scatter(paintData[:, 0], paintData[:, 1], s=10, c=colorBoard[i])
-    plt.savefig('./CIFAR10/'+ timeLable() +'visualize.png')
+    plt.savefig('./SVHNtest/'+ timeLable() +'visualize.png')
     plt.close()
