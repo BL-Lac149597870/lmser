@@ -231,6 +231,7 @@ if __name__ == '__main__':
             epochReconLoss += reconLoss.cpu().data.numpy()
             epochPredLoss += predLoss.cpu().data.numpy()
             _, pred = out.max(1)
+            # print(labels.shape)
             correct += (pred == labels).sum().cpu().data.numpy()
         testLoss /= (step + 1)
         epochReconLoss /= (step + 1)

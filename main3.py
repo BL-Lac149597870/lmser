@@ -1,7 +1,7 @@
 '''
 Author: QHGG
 Date: 2020-12-09 13:01:01
-LastEditTime: 2020-12-09 13:09:02
+LastEditTime: 2020-12-15 21:42:19
 LastEditors: QHGG
 Description: 
 FilePath: /lmser/main3.py
@@ -244,7 +244,7 @@ if __name__ == '__main__':
         testLoss /= (step + 1)
         epochReconLoss /= (step + 1)
         epochPredLoss /= (step + 1)
-        correct /= 10000
+        correct /= 26032
         testLosses.append(testLoss)
         testReconLosses.append(epochReconLoss)
         testPredLosses.append(epochPredLoss)
