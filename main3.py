@@ -145,19 +145,19 @@ class ConvAutoEncoderManual(nn.Module):
                                                      stride=3, padding=2))
         h2 = nn.functional.relu(nn.functional.conv2d(input=h1, weight=self.weight2, bias=self.bias2,
                                                      stride=3, padding=0))
-        h3 = nn.functional.relu(nn.functional.conv2d(input=h2, weight=self.weight3, bias=self.bias3,
+        # h3 = nn.functional.relu(nn.functional.conv2d(input=h2, weight=self.weight3, bias=self.bias3,
+        #                                              stride=3, padding=1))
+        h4 = nn.functional.relu(nn.functional.conv2d(input=h2, weight=self.weight4, bias=self.bias4,
                                                      stride=3, padding=1))
-        h4 = nn.functional.relu(nn.functional.conv2d(input=h3, weight=self.weight4, bias=self.bias4,
-                                                     stride=1, padding=1))
         h4 = h4.view(-1, 64*2*2)
         h5 = nn.functional.linear(input=h4, weight=self.weight5, bias=self.bias5)
         h6 = nn.functional.relu(nn.functional.linear(input=h5, weight=self.weight5.t(), bias=self.bias6) + h4)
         h6 = h6.view(-1, 64, 2, 2)
         h7 = nn.functional.relu(nn.functional.conv_transpose2d(input=h6, weight=self.weight4, bias=self.bias7,
-                                                               stride=1, padding=1) + h3)
-        h8 = nn.functional.relu(nn.functional.conv_transpose2d(input=h7, weight=self.weight3, bias=self.bias8,
-                                                               stride=3, padding=1) + h2)
-        h9 = nn.functional.relu(nn.functional.conv_transpose2d(input=h8, weight=self.weight2, bias=self.bias9,
+                                                               stride=1, padding=1) + h2)
+        # h8 = nn.functional.relu(nn.functional.conv_transpose2d(input=h6, weight=self.weight3, bias=self.bias8,
+        #                                                        stride=3, padding=1) + h2)
+        h9 = nn.functional.relu(nn.functional.conv_transpose2d(input=h7, weight=self.weight2, bias=self.bias9,
                                                                stride=3, padding=0) + h1)
         h10 = nn.functional.relu(nn.functional.conv_transpose2d(input=h9, weight=self.weight1, bias=self.bias10,
                                                                 stride=3, padding=2))
